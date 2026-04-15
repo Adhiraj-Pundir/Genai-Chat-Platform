@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./react_frontend
+      dockerfile: ../docker/react_frontend/Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./react_frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./nodejs_backend
+      dockerfile: ../docker/nodejs_backend/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./nodejs_backend/.env
+    environment:
+      - PYTHON_SERVICE_URL=http://python-ai:5000
+    depends_on:
+      - python-ai
+    networks:
+      - app-network
+
+  python-ai:
+    build:
+      context: ./python_ai_service
+      dockerfile: ../docker/python_ai_service/Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./python_ai_service/.env
+    volumes:
+      - ./firebase-service-account.json:/app/firebase-service-account.json
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

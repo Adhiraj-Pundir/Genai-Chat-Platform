@@ -1,0 +1,9 @@
+flask
+flask-cors
+python-dotenv
+google-genai
+tavily-python
+textblob
+transformers
+torch
+firebase-admin
