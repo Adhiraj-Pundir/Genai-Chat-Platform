@@ -12,3 +12,4 @@ export function errorHandler(
     error: err.message || "Internal server error",
   });
 }
+
